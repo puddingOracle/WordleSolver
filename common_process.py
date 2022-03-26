@@ -13,9 +13,13 @@ def narrow_down_candidates(answer_candidates : list, judge : list, inp):
                 # 各桁の判定によって、解答候補に残らないものを除外する。
                 if (judge[nth] == '2') and (inp[nth] != word[nth]):
                     new_answer_candidates.remove(word)
-                elif (judge[nth] == '1') and (inp[nth] not in word):
-                    new_answer_candidates.remove(word)
-                elif (judge[nth] == '0'):
+                elif judge[nth] == '1':
+                    # 基本的にはinp[nth] not in wordで消したいが、例外がある
+                    if inp[nth] == word[nth]: # inp中に同じ文字が複数ある場合に、inp[nth] == word[nth]となることがある
+                        new_answer_candidates.remove(word)
+                    elif inp.count(inp[nth]) > word.count(inp[nth]):
+                        new_answer_candidates.remove(word)
+                elif judge[nth] == '0':
                     # judge[nth]がNBであり、かつ、inp[nth]がwordに含まれていても解答候補として残る場合を考える。
                     # このとき、inp[nth]がinpに2つ以上含まれている。1つだけだった場合、解答候補からは除外される。
                     # 以下の場合に分ける。

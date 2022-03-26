@@ -3,7 +3,7 @@ import math
 import numpy as np
 import copy
 import evaluater
-import cproc
+import common_process
 import simple_entropy_approach
 
 word_list_master = list(pd.read_csv('wordlist.csv', header=None)[0])
@@ -25,7 +25,7 @@ def make_second_guess_list(first_guess : str):
                         answer_candidates = list(pd.read_csv('candidates.csv', header=None)[0])
                         judge = [str(i), str(j), str(k), str(l), str(m)]
                         print(''.join(judge))
-                        answer_candidates = copy.copy(cproc.narrow_down_candidates(answer_candidates, judge, first_guess))
+                        answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, first_guess))
                         simple_entropy_approach.calc_all_entropy(answer_candidates, entropies, [first_guess])
                         print(entropies['H'].idxmax())
                         second_guesses.loc[''.join(judge)] = [entropies['H'].idxmax()]

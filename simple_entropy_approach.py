@@ -3,12 +3,13 @@ import math
 import numpy as np
 import copy
 import evaluater
-import cproc
+import common_process
 
 word_list_master = list(pd.read_csv('wordlist.csv', header=None)[0])
 word_list_len = len(word_list_master)
 
 def main():
+
     entropies = pd.read_csv('honke_init_entropies.csv', index_col=0)
     # entropies = pd.read_csv('init_entropies.csv', index_col=0)
     answer_candidates = list(pd.read_csv('candidates.csv', header=None)[0])
@@ -20,6 +21,7 @@ def main():
     answer_list = list(pd.read_csv('candidates_for_test.csv', header=None)[0])
     results = pd.read_csv('results.csv', index_col=0)
 
+    '''
     while True:
         guess_count += 1
         # エントロピー計算。初手、二手目は既に計算済み。解答候補1つのときは計算不要、2つを絞るのはエントロピーの計算では難しいのでどちらかを出す。
@@ -46,9 +48,10 @@ def main():
         inp_history.append(inp)
         print(inp)
         judge = list(input())
-        answer_candidates = copy.copy(cproc.narrow_down_candidates(answer_candidates, judge, inp))
-
+        answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
     '''
+
+    #'''
     for ans in answer_list:
         question_num += 1
         print('##################')
@@ -88,9 +91,9 @@ def main():
                 answer_candidates = list(pd.read_csv('candidates.csv', header=None)[0])
                 break
             else:
-                answer_candidates = copy.copy(cproc.narrow_down_candidates(answer_candidates, judge, inp))
+                answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
     results.to_csv('results.csv')
-    '''
+    #'''
 
 def reset_entropy(entropies : pd.DataFrame):
     for i in range(len(entropies)):
