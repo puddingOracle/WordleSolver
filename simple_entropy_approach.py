@@ -21,7 +21,7 @@ def main():
     answer_list = list(pd.read_csv('candidates_for_test.csv', header=None)[0])
     results = pd.read_csv('results.csv', index_col=0)
 
-    '''
+    #'''
     while True:
         guess_count += 1
         # エントロピー計算。初手、二手目は既に計算済み。解答候補1つのときは計算不要、2つを絞るのはエントロピーの計算では難しいのでどちらかを出す。
@@ -49,9 +49,9 @@ def main():
         print(inp)
         judge = list(input())
         answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
-    '''
-
     #'''
+
+    '''
     for ans in answer_list:
         question_num += 1
         print('##################')
@@ -93,7 +93,7 @@ def main():
             else:
                 answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
     results.to_csv('results.csv')
-    #'''
+    '''
 
 def reset_entropy(entropies : pd.DataFrame):
     for i in range(len(entropies)):
