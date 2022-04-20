@@ -5,22 +5,20 @@ import copy
 import evaluater
 import common_process
 
-word_list_master = list(pd.read_csv('wordlist.csv', header=None)[0])
+word_list_master = list(pd.read_csv('./data/wordlist.csv', header=None)[0])
 word_list_len = len(word_list_master)
 
 def main():
 
-    entropies = pd.read_csv('honke_init_entropies.csv', index_col=0)
+    entropies = pd.read_csv('./data/honke_init_entropies.csv', index_col=0)
     # entropies = pd.read_csv('init_entropies.csv', index_col=0)
-    answer_candidates = list(pd.read_csv('candidates.csv', header=None)[0])
+    answer_candidates = list(pd.read_csv('./data/candidates.csv', header=None)[0])
     guess_count = 0
     judge = ['','','','','']
     inp = ''
     inp_history = []
-    question_num = 0
-    answer_list = list(pd.read_csv('candidates_for_test.csv', header=None)[0])
-    results = pd.read_csv('results.csv', index_col=0)
 
+    # 通常。効率測定の再にはコメントアウトする
     #'''
     while True:
         guess_count += 1
@@ -34,7 +32,7 @@ def main():
         else:
             # pandas、read_csvでindexの型を指定する方法がなく'00001'みたいな値はintにキャストされてしまう模様
             # 一度dtype=strとして全列読み込み、後にindexとして読ませることにする
-            sg = pd.read_csv('soare_second_guesses.csv', dtype=str).set_index('judge')
+            sg = pd.read_csv('./data/soare_second_guesses.csv', dtype=str).set_index('judge')
             inp = sg.at[''.join(judge), 'word']
 
         if len(answer_candidates) > 1:
@@ -42,8 +40,9 @@ def main():
         else:
             print('Answer:')
 
-        entropies.to_csv('temp_entropy.csv')
-        pd.DataFrame(answer_candidates).to_csv('temp_answer_can.csv')
+        # 現在のエントロピーと解答候補を出力。デバッグ用
+        # entropies.to_csv('./outputs/temp_entropy.csv')
+        # pd.DataFrame(answer_candidates).to_csv('./outputs/temp_answer_can.csv')
 
         inp_history.append(inp)
         print(inp)
@@ -51,7 +50,12 @@ def main():
         answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
     #'''
 
+    # 効率計測用
     '''
+    question_num = 0
+    answer_list = list(pd.read_csv('./data/candidates_for_test.csv', header=None)[0])
+    results = pd.read_csv('./outputs/results.csv', index_col=0)
+
     for ans in answer_list:
         question_num += 1
         print('##################')
@@ -70,7 +74,7 @@ def main():
             else:
                 # pandas、read_csvでindexの型を指定する方法がなく'00001'みたいな値はintにキャストされてしまう模様
                 # 一度dtype=strとして全列読み込み、後にindexとして読ませることにする
-                sg = pd.read_csv('soare_second_guesses.csv', dtype=str).set_index('judge')
+                sg = pd.read_csv('./data/soare_second_guesses.csv', dtype=str).set_index('judge')
                 inp = sg.at[''.join(judge), 'word']
 
             if len(answer_candidates) > 1:
@@ -87,12 +91,12 @@ def main():
                 results.loc[inp] = guess_count
                 guess_count = 0
                 inp_history = []
-                entropies = pd.read_csv('honke_init_entropies.csv', index_col=0)
-                answer_candidates = list(pd.read_csv('candidates.csv', header=None)[0])
+                entropies = pd.read_csv('./data/honke_init_entropies.csv', index_col=0)
+                answer_candidates = list(pd.read_csv('./data/candidates.csv', header=None)[0])
                 break
             else:
                 answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
-    results.to_csv('results.csv')
+    results.to_csv('./outputs/results.csv')
     '''
 
 def reset_entropy(entropies : pd.DataFrame):
