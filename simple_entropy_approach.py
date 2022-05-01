@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import evaluater
 import common_process
+import re
 
 word_list_master = list(pd.read_csv('./data/wordlist.csv', header=None)[0])
 word_list_len = len(word_list_master)
@@ -46,7 +47,12 @@ def main():
 
         inp_history.append(inp)
         print(inp)
-        judge = list(input())
+        while True:
+            judge = input()
+            if re.fullmatch(r'[0-2]{5}', judge):
+                judge = list(judge) # 処理の都合上リスト化
+                break
+            print("Input numbers accordng to judgement.\ngray -> 0, yellow -> 1, green -> 2")
         answer_candidates = copy.copy(common_process.narrow_down_candidates(answer_candidates, judge, inp))
     #'''
 
